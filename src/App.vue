@@ -5,6 +5,17 @@
                 <div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3">
                     <h1>File a Complaint</h1>
                     <hr>
+                     <div class="form-group">
+                        <label for="fullName">Full Name</label>
+                        <input
+                                type="text"
+                                id="fullName"
+                                class="form-control"
+                                v-bind:value="userDataObject.vFullNameModel"
+                                @input="userDataObject.vFullNameModel = $event.target.value">
+
+                    </div>
+
                     <div class="form-group">
                         <label for="email">Mail</label>
                         <input
@@ -73,14 +84,14 @@
                                 type="radio"
                                 id="male"
                                 value="Male"
-                                v-model="gender"> Male
+                                v-model="vGenderModel"> Male
                     </label>
                     <label for="female">
                         <input
                                 type="radio"
                                 id="female"
                                 value="Female"
-                                v-model="gender"> Female
+                                v-model="vGenderModel"> Female
                     </label>
                 </div>
             </div>
@@ -99,23 +110,30 @@
                     </select>
                 </div>
             </div>
+            <div class="row">
+                <div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3">
+                    <app-switch v-model="vDataSwitchModel"></app-switch>                   
+                </div>
+            </div>
             <hr>
             <div class="row">
                 <div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3">
                     <button
-                            class="btn btn-primary">Submit!
+                            class="btn btn-primary"
+                            @click.prevent="submitted">Submit!
                     </button>
                 </div>
             </div>
         </form>
         <hr>
-        <div class="row">
+        <div class="row" v-if="isSubmitted">
             <div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3">
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <h4>Your Data</h4>
                     </div>
                     <div class="panel-body">
+                        <p>Full Name: {{ userDataObject.vFullNameModel }}
                         <p>Mail: {{ userDataObject.vEmailModel }}</p>
                         <p>Password: {{ userDataObject.vPasswordModel }}</p>
                         <p>Age:{{ userDataObject.vAgeModel }}</p>
@@ -127,9 +145,9 @@
                             v-bind:key="mail"
                             >{{ mail }}</li>
                         </ul>
-                        <p>Gender: {{ gender }}</p>
+                        <p>Gender: {{ vGenderModel }}</p>
                         <p>Priority: {{ vSelectedPriorityModel }}</p>
-                        <p>Switched:</p>
+                        <p>Switched: {{ vDataSwitchModel }}</p>
                     </div>
                 </div>
             </div>
@@ -138,22 +156,35 @@
 </template>
 
 <script>
+    import Switcher from './Switcher.vue';
     export default {
         data () {
             return {
                 userDataObject: {
+                  vFullNameModel: '',
                   vEmailModel: '',
                   vPasswordModel: '',
                   vAgeModel: 27  
                 },
                 vMessageModel : 'A new Text',
                 vSendMailModel: [],
-                gender: 'Male',
+                vGenderModel: 'Male',
                 vSelectedPriorityModel: 'High',
-                vPrioritiesModel: ['High', 'Medium', 'Low']
+                vPrioritiesModel: ['High', 'Medium', 'Low'],
+                vDataSwitchModel: true,
+                isSubmitted: false
                 
             }
-        }
+        },
+        methods: {
+            submitted() {
+                this.isSubmitted = true;
+            }
+        },
+        components: {
+        appSwitch: Switcher
+    }
+    
     }
 </script>
 
